@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import SpotifyLogout from './Logout';
+import SpotifyUserProfile from './SpotifyUserProfile';
 
 const Header = (props) => {
   return (
@@ -26,7 +27,7 @@ const Header = (props) => {
           <SpotifyLogout setLoggedIn={props.setLoggedIn} setToken={props.setToken} />
         </li>
         <li>
-          <p>User Info</p>
+          <SpotifyUserProfile token={props.token} />
         </li>
       </ul>
     </nav>
