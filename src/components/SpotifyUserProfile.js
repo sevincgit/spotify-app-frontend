@@ -31,10 +31,34 @@ const SpotifyUserProfile = (props) => {
 
   myProfile();
 
+  const saveUserData = async () => {
+    const currentUserData = {
+      userid: spotifyUserID,
+      username: spotifyProfileName,
+    };
+    let usersPath = `${process.env.REACT_APP_SPOTIFYAPP_API}/users`;
+    try {
+      let response = await fetch(usersPath, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(currentUserData),
+      });
+      console.log(response);
+      if (response.status === 201) {
+        console.log('new user saved');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
-      <img src={spotifyUserImageUrl} className='rounded-circle' style={{ height: '50px', width: '50px' }} alt='Avatar' />
-      {/* <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' sx={{ width: 24, height: 24 }} /> */}
+      <img src={spotifyUserImageUrl} className='rounded-circle' style={{ height: '40px', width: '50px' }} alt='Avatar' />
+      {/* <Avatar alt='User image' src={spotifyUserImageUrl} sx={{ width: 24, height: 24 }} /> */}
       <p>{spotifyProfileName}</p>
     </div>
   );
