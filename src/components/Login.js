@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-
-function SpotifyLogin = () => {
-    const authPath = process.env.AUTH_ENDPOINT
-    const mainPath = process.env.REDIRECT_URI
+const SpotifyLogin = () => {
+    const authPath = process.env.REACT_APP_AUTH_ENDPOINT
+    console.log(authPath);
+    const mainPath = process.env.REACT_APP_REDIRECT_URI
+    const clientId = process.env.REACT_APP_CLIENT_ID
     const RESPONSE_TYPE = 'token'
-    const authLink = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`
-
+    const authLink = `${authPath}?client_id=${clientId}&redirect_uri=${mainPath}&response_type=${RESPONSE_TYPE}`
+    console.log(authLink);
     const [token, setToken] = useState('');
-    const [searchKey, setSearchKey] = useState('');
-    const [artists, setArtists] = useState([]);
   
     useEffect(() => {
       const hash = window.location.hash;
@@ -31,8 +29,11 @@ function SpotifyLogin = () => {
   
 return (
     <div>
-        
+        <h2> Logo </h2>
+        <p> Short description </p>
+        <a href={authLink}>Login to Spotify</a> 
     </div>
-
 )
 }
+
+export default SpotifyLogin;
