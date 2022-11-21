@@ -1,11 +1,10 @@
-import { useState } from 'react';
-
 const SpotifyLogout = (props) => {
   return (
     <div>
       <button
         onClick={() => {
-          localStorage.removeItem('token');
+          localStorage.removeItem('spotifyToken');
+          props.setToken('');
           props.setLoggedIn(false);
         }}
       >
