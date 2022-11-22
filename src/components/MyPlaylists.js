@@ -19,15 +19,23 @@ const MyPlaylists = (props) => {
         const playlistArray = playlistResponse.data.items;
         //   TODO: Find a way to retrieve all playlists by using offset parameter
         const totalNumberOfPlaylists = playlistResponse.data.total;
-        setMyPlaylists(playlistArray);
-        console.log('myPlaylists', myPlaylists);
+        console.log('totalNumberOfPlaylists: ', totalNumberOfPlaylists);
+        // Check if user has a playlist to avoid getPlaylist() to be called always
+        if (totalNumberOfPlaylists > 0) {
+          setMyPlaylists(playlistArray);
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    getPlaylists();
+    // Run getPlaylists() only when the state is empty
+    if (myPlaylists.length === 0) {
+      getPlaylists();
+    }
+    console.log('myPlaylists:', myPlaylists);
+
     //TODO: check dependencies
-  }, [props.token, getPlaylistsEndpoint]);
+  }, [props.token, getPlaylistsEndpoint, setMyPlaylists, myPlaylists]);
 
   return (
     <div className='my-playlists-container px-3'>
@@ -35,22 +43,20 @@ const MyPlaylists = (props) => {
         <thead>
           <tr>
             {Array.from({ length: 3 }).map((_, index) => (
-              <th key={index}>{headers[index]}</th>
+              <th key={`header-${index}`}>{headers[index]}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {myPlaylists.map((playlist, index) => {
-            //TODO: solve map error in the console
             return (
               <tr>
-                {/* TODO: Check why images can't be displayed. Remove playlist cover text */}
-                <td key={index}>
-                  <img src={playlist.images[0]} style={{ width: '60px' }} alt='playlist cover' />
+                <td>
+                  <img src={playlist.images[0].url} style={{ width: '60px' }} alt='playlist cover' />
                 </td>
                 {/* TODO: How can we make playlist names clickable? After clicking, how can we send the playlist info to the next, individual playlist page? */}
-                <td key={index}>{playlist.name}</td>
-                <td key={index}>{playlist.tracks.total}</td>
+                <td>{playlist.name}</td>
+                <td>{playlist.tracks.total}</td>
               </tr>
             );
           })}
