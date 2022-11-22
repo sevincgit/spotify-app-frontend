@@ -1,5 +1,6 @@
 import './App.css';
 import SpotifyLogin from './components/Login';
+import CreatePlaylist from './components/CreatePlaylist';
 import { useState } from 'react';
 import Header from './components/Header';
 
@@ -17,7 +18,7 @@ function App() {
           <>
             <Header setLoggedIn={setLoggedIn} token={token} setToken={setToken} spotifyUserID={spotifyUserID} setSpotifyUserID={setSpotifyUserID} />
             <Routes>
-              <Route path='/' element={<div>Create Playlist Component</div>} />
+              <Route path='/' element={<CreatePlaylist token={token} spotifyUserID={spotifyUserID} />} />
               <Route path='/my-playlists' element={<div>My Playlists Component</div>} />
               <Route path='/about' element={<div>About Component</div>} />
               <Route path='*' element={<div>Pag not found</div>} />
