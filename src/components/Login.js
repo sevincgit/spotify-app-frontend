@@ -5,8 +5,9 @@ const SpotifyLogin = (props) => {
   console.log(authPath);
   const mainPath = process.env.REACT_APP_REDIRECT_URI;
   const clientId = process.env.REACT_APP_CLIENT_ID;
+  const scope = 'playlist-modify-private playlist-modify-public playlist-read-private playlist-read-collaborative user-read-private';
   const RESPONSE_TYPE = 'token';
-  const authLink = `${authPath}?client_id=${clientId}&redirect_uri=${mainPath}&response_type=${RESPONSE_TYPE}`;
+  const authLink = `${authPath}?client_id=${clientId}&scope=${scope}&redirect_uri=${mainPath}&response_type=${RESPONSE_TYPE}`;
   console.log(authLink);
 
   useEffect(() => {
