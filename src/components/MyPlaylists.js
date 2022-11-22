@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
+import { Link, useParams } from 'react-router-dom';
 const headers = ['Cover', 'Name', '# Tracks'];
 
 const MyPlaylists = (props) => {
@@ -33,10 +34,7 @@ const MyPlaylists = (props) => {
       getPlaylists();
     }
     console.log('myPlaylists:', myPlaylists);
-
-    //TODO: check dependencies
   }, [props.token, getPlaylistsEndpoint, setMyPlaylists, myPlaylists]);
-
   return (
     <div className='my-playlists-container px-3'>
       <Table responsive>
@@ -54,8 +52,9 @@ const MyPlaylists = (props) => {
                 <td>
                   <img src={playlist.images[0].url} style={{ width: '60px' }} alt='playlist cover' />
                 </td>
-                {/* TODO: How can we make playlist names clickable? After clicking, how can we send the playlist info to the next, individual playlist page? */}
-                <td>{playlist.name}</td>
+                <td>
+                  <Link to={`/my-playlists/${playlist.id}`}>{playlist.name}</Link>
+                </td>
                 <td>{playlist.tracks.total}</td>
               </tr>
             );
