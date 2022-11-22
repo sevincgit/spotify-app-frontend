@@ -28,7 +28,7 @@ const Header = (props) => {
       </ul>
       <ul className='nav nav-group-1 align-items-center'>
         <li>
-          <SpotifyUserProfile token={props.token} />
+          <SpotifyUserProfile token={props.token} spotifyUserID={props.spotifyUserID} setSpotifyUserID={props.setSpotifyUserID} />
         </li>
         <li className='logout-button px-3'>
           <SpotifyLogout setLoggedIn={props.setLoggedIn} setToken={props.setToken} />

@@ -6,7 +6,6 @@ const USERPROFILE_ENDPOINT = `${SPOTIFY_API}/v1/me`;
 
 const SpotifyUserProfile = (props) => {
   const [spotifyProfileName, setSpotifyProfileName] = useState('');
-  const [spotifyUserID, setSpotifyUserID] = useState('');
   const [spotifyUserImageUrl, setSpotifyUserImageUrl] = useState('');
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const SpotifyUserProfile = (props) => {
         console.log('token received', props.token);
         console.log('data', data);
         setSpotifyProfileName(data.display_name);
-        setSpotifyUserID(data.id);
+        props.setSpotifyUserID(data.id);
         setSpotifyUserImageUrl(data.images[0].url);
       } catch (error) {
         console.log(error);
@@ -35,16 +34,16 @@ const SpotifyUserProfile = (props) => {
     };
 
     myProfile();
-  }, [props.token]);
+  }, [props, props.token]);
 
   useEffect(() => {
     const saveUserData = async () => {
-      if (!spotifyUserID || !spotifyProfileName) {
+      if (!props.spotifyUserID || !spotifyProfileName) {
         return;
       }
       console.log('saving user to db');
       const currentUserData = {
-        id: spotifyUserID,
+        id: props.spotifyUserID,
         username: spotifyProfileName,
       };
       let usersPath = `${process.env.REACT_APP_SPOTIFYAPP_API}/users`;
@@ -68,7 +67,7 @@ const SpotifyUserProfile = (props) => {
       }
     };
     saveUserData();
-  }, [spotifyProfileName, spotifyUserID]);
+  }, [spotifyProfileName, props.spotifyUserID]);
 
   return (
     <div>

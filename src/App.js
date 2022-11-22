@@ -9,12 +9,13 @@ function App() {
   // adding a state for logged in
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState('');
+  const [spotifyUserID, setSpotifyUserID] = useState('');
   return (
     <BrowserRouter>
       <div className='App'>
         {loggedIn ? (
           <>
-            <Header setLoggedIn={setLoggedIn} token={token} setToken={setToken} />
+            <Header setLoggedIn={setLoggedIn} token={token} setToken={setToken} spotifyUserID={spotifyUserID} setSpotifyUserID={setSpotifyUserID} />
             <Routes>
               <Route path='/' element={<div>Create Playlist Component</div>} />
               <Route path='/my-playlists' element={<div>My Playlists Component</div>} />
