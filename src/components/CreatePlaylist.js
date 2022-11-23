@@ -6,7 +6,7 @@ const SPOTIFY_API = 'https://api.spotify.com';
 const RECOMMENDATIONS_ENDPOINT = `${SPOTIFY_API}/v1/recommendations`;
 
 const CreatePlaylist = (props) => {
-  const [recommendedSongs, setRecommendedSongs] = useState([]);
+  const [recommendedSongs, setRecommendedSongs] = useState('');
   const [newPlaylistId, setNewPlaylistId] = useState('');
   const [addedSongsId, setAddedSongsId] = useState('');
   const [energyValue, setEnergyValue] = useState([0.3, 0.5]);
@@ -43,20 +43,20 @@ const CreatePlaylist = (props) => {
       console.log('token received', props.token);
       console.log('playlist data', data);
       setNewPlaylistId(data.id);
+      console.log(data.id)
     } catch (error) {
       console.log(error);
     }
   };
 
-  // useEffect(() => {
+   useEffect(() => {
   const listOfSongs = async () => {
-    // if (!props.spotifyUserID || !newPlaylistId) {
-    //   return;
-    // }
+     if (!props.spotifyUserID || !newPlaylistId) {
+      return;
+     }
     console.log(energyValue);
     console.log(tempoValue);
     try {
-      // let tracks = `seed_tracks=0c6xIDDpzE81m2q797ordA`;
       let genres = `seed_genres=${genre}`;
       let minPopularity = `min_popularity=${popularityValue[0]}`;
       let maxPopularity = `max_popularity=${popularityValue[1]}`;
@@ -80,29 +80,27 @@ const CreatePlaylist = (props) => {
       console.log(RECOMMENDATIONS_ENDPOINT);
       console.log('token received for playlist', props.token);
       console.log('listOfSongs', data);
-      setRecommendedSongs(data.tracks[0].uri);
+      const songsArray = data.tracks.map((track) => track.uri)
+      console.log(songsArray);
+      setRecommendedSongs(songsArray.join(','));
     } catch (error) {
       console.log(error);
     }
   };
-  // listOfSongs();
-  // }, [props.token, props.spotifyUserID, newPlaylistId, energyValue]);
+   listOfSongs();
+   }, [props.token, props.spotifyUserID, newPlaylistId, energyValue, danceabilityValue, genre, tempoValue, popularityValue]);
 
-  //TODO Figure out why we are getting following status: 401, message: 'No token provided'}
   useEffect(() => {
     const addSongsToPlaylist = async () => {
-      //   if (!props.token || !props.spotifyUserID || !recommendedSongs)  {
-      //     return;
-      //   }
+        
+         if (!props.token || !props.spotifyUserID || !recommendedSongs)  {
+           return;
+         }
       try {
-        let songsaddedtoplaylisttoken = props.token;
-        console.log('addsongs function', songsaddedtoplaylisttoken);
-        let playlistId = newPlaylistId;
-        let trackUri = recommendedSongs;
-        const SONGSADDEDTONEWPLAYLIST_ENDPOINT = `${SPOTIFY_API}/v1/playlists/${playlistId}/tracks?position=0&uris=${trackUri}`;
-        const { data } = await axios.post('https://api.spotify.com/v1/playlists/6FlBwo84fauuYk4oGkyh1d/tracks', '', {
+        console.log(recommendedSongs)
+        const { data } = await axios.post(`https://api.spotify.com/v1/playlists/${newPlaylistId}/tracks`, '', {
           params: {
-            uris: 'spotify:track:32OlwWuMpZ6b0aN2RZOeMS',
+            uris: recommendedSongs,
           },
           headers: {
             Accept: 'application/json',
@@ -110,8 +108,8 @@ const CreatePlaylist = (props) => {
             Authorization: 'Bearer ' + props.token,
           },
         });
-        console.log(SONGSADDEDTONEWPLAYLIST_ENDPOINT);
         console.log('Songs added to new playlist', data);
+        console.log('New playlist id', newPlaylistId)
         setAddedSongsId(data.snapshot_id);
       } catch (error) {
         console.log(error);
@@ -169,20 +167,17 @@ const CreatePlaylist = (props) => {
           </Select>
         </FormControl>
       </Box>
-      <button
+      {/* <button
         onClick={() => {
           listOfSongs();
           console.log('Click on button');
         }}
       >
         Get recommended songs
-      </button>
+      </button> */}
       <button variant={'contained'} onClick={createNewPlaylist}>
         Create new playlist
       </button>
-      <p>{recommendedSongs}</p>
-      <p>{newPlaylistId}</p>
-      <p>{addedSongsId}</p>
     </div>
   );
 };
