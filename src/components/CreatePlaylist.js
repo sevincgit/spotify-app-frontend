@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ContinuousSlider } from './Sliders';
 import { Box, Slider } from '@mui/material';
 
 const SPOTIFY_API = 'https://api.spotify.com';
@@ -12,6 +11,8 @@ const CreatePlaylist = (props) => {
   const [addedSongsId, setAddedSongsId] = useState('');
   const [energyValue, setEnergyValue] = useState([0.3, 0.5]);
   const [tempoValue, setTempoValue] = useState([90, 120]);
+  const [popularityValue, setPopularityValue] = useState([50, 80])
+  const [danceabilityValue, setDanceabilityValue] = useState ([0.3, 0.5])
 
   const createNewPlaylist = async () => {
     if (!props.spotifyUserID || !props.token) {
@@ -56,14 +57,16 @@ const CreatePlaylist = (props) => {
     try {
       // let tracks = `seed_tracks=0c6xIDDpzE81m2q797ordA`;
       let genres = `seed_genres=country`;
-      // let minPopularity = `min_popularity=80`;
-      // let maxPopularity = `max_popularity=95`;
+      let minPopularity = `min_popularity=${popularityValue[0]}`;
+      let maxPopularity = `max_popularity=${popularityValue[1]}`;
       let minEnergy = `min_energy=${energyValue[0]}`;
       let maxEnergy = `max_energy=${energyValue[1]}`;
       let minTempoValue = `min_tempo=${tempoValue[0]}`;
       let maxTempoValue = `max_tempo=${tempoValue[1]}`;
+      let minDanceability = `min_danceability=${danceabilityValue[0]}`;
+      let maxDanceability = `max_danceability=${danceabilityValue[1]}`;
 
-      let recommendationPath = `${RECOMMENDATIONS_ENDPOINT}?${genres}&${minEnergy}&${maxEnergy}&${minTempoValue}&${maxTempoValue}`;
+      let recommendationPath = `${RECOMMENDATIONS_ENDPOINT}?${genres}&${minDanceability}&${maxDanceability}&${minPopularity}&${maxPopularity}&${minEnergy}&${maxEnergy}&${minTempoValue}&${maxTempoValue}`;
       console.log(recommendationPath);
 
       const { data } = await axios.get(recommendationPath, {
@@ -96,7 +99,7 @@ const CreatePlaylist = (props) => {
         let playlistId = newPlaylistId;
         let trackUri = recommendedSongs;
         const SONGSADDEDTONEWPLAYLIST_ENDPOINT = `${SPOTIFY_API}/v1/playlists/${playlistId}/tracks?position=0&uris=${trackUri}`;
-        const { data } = await axios.post('https://api.spotify.com/v1/playlists/4A1JXoJkWgvW3WwlwZYX8C/tracks', '', {
+        const { data } = await axios.post('https://api.spotify.com/v1/playlists/5FNTx6USaRqBjL9T3G4z04/tracks', '', {
           params: {
             uris: 'spotify:track:32OlwWuMpZ6b0aN2RZOeMS',
           },
@@ -119,8 +122,26 @@ const CreatePlaylist = (props) => {
   return (
     <div>
       <Box sx={{ width: 300 }}>
+       <Slider
+          getAriaLabel={() => 'Danceability range'} 
+          value={danceabilityValue}
+          onChange={(e) => setDanceabilityValue(e.target.value)}
+          min={0}
+          max={1}
+          step={0.1}
+          valueLabelDisplay='auto'
+        />
         <Slider
-          aria-label='Energy'
+          getAriaLabel={() => 'Popularity range'} 
+          value={popularityValue}
+          onChange={(e) => setPopularityValue(e.target.value)}
+          min={0}
+          max={100}
+          step={10}
+          valueLabelDisplay='auto'
+        />
+        <Slider
+          getAriaLabel={() => 'Energy range'}        //aria-label='Energy'
           value={energyValue}
           onChange={(e) => setEnergyValue(e.target.value)}
           min={0}
@@ -129,8 +150,9 @@ const CreatePlaylist = (props) => {
           valueLabelDisplay='auto'
         />
         <Slider
-          // getAriaLabel={() => 'Temperature range'}
+          getAriaLabel={() => 'Tempo range'}
           value={tempoValue}
+          //aria-label='Tempo'
           onChange={(e) => setTempoValue(e.target.value)}
           valueLabelDisplay='auto'
           min={50}
