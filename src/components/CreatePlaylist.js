@@ -11,8 +11,8 @@ const CreatePlaylist = (props) => {
   const [addedSongsId, setAddedSongsId] = useState('');
   const [energyValue, setEnergyValue] = useState([0.3, 0.5]);
   const [tempoValue, setTempoValue] = useState([90, 120]);
-  const [popularityValue, setPopularityValue] = useState([50, 80])
-  const [danceabilityValue, setDanceabilityValue] = useState ([0.3, 0.5])
+  const [popularityValue, setPopularityValue] = useState([50, 80]);
+  const [danceabilityValue, setDanceabilityValue] = useState([0.3, 0.5]);
 
   const createNewPlaylist = async () => {
     if (!props.spotifyUserID || !props.token) {
@@ -99,7 +99,7 @@ const CreatePlaylist = (props) => {
         let playlistId = newPlaylistId;
         let trackUri = recommendedSongs;
         const SONGSADDEDTONEWPLAYLIST_ENDPOINT = `${SPOTIFY_API}/v1/playlists/${playlistId}/tracks?position=0&uris=${trackUri}`;
-        const { data } = await axios.post('https://api.spotify.com/v1/playlists/5FNTx6USaRqBjL9T3G4z04/tracks', '', {
+        const { data } = await axios.post('https://api.spotify.com/v1/playlists/6FlBwo84fauuYk4oGkyh1d/tracks', '', {
           params: {
             uris: 'spotify:track:32OlwWuMpZ6b0aN2RZOeMS',
           },
@@ -122,8 +122,8 @@ const CreatePlaylist = (props) => {
   return (
     <div>
       <Box sx={{ width: 300 }}>
-       <Slider
-          getAriaLabel={() => 'Danceability range'} 
+        <Slider
+          getAriaLabel={() => 'Danceability range'}
           value={danceabilityValue}
           onChange={(e) => setDanceabilityValue(e.target.value)}
           min={0}
@@ -132,7 +132,7 @@ const CreatePlaylist = (props) => {
           valueLabelDisplay='auto'
         />
         <Slider
-          getAriaLabel={() => 'Popularity range'} 
+          getAriaLabel={() => 'Popularity range'}
           value={popularityValue}
           onChange={(e) => setPopularityValue(e.target.value)}
           min={0}
@@ -141,7 +141,7 @@ const CreatePlaylist = (props) => {
           valueLabelDisplay='auto'
         />
         <Slider
-          getAriaLabel={() => 'Energy range'}        //aria-label='Energy'
+          getAriaLabel={() => 'Energy range'} //aria-label='Energy'
           value={energyValue}
           onChange={(e) => setEnergyValue(e.target.value)}
           min={0}
