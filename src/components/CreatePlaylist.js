@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Slider } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, Slider } from '@mui/material';
 
 const SPOTIFY_API = 'https://api.spotify.com';
 const RECOMMENDATIONS_ENDPOINT = `${SPOTIFY_API}/v1/recommendations`;
@@ -13,6 +13,7 @@ const CreatePlaylist = (props) => {
   const [tempoValue, setTempoValue] = useState([90, 120]);
   const [popularityValue, setPopularityValue] = useState([50, 80]);
   const [danceabilityValue, setDanceabilityValue] = useState([0.3, 0.5]);
+  const [genre, setGenre] = useState('');
 
   const createNewPlaylist = async () => {
     if (!props.spotifyUserID || !props.token) {
@@ -56,7 +57,7 @@ const CreatePlaylist = (props) => {
     console.log(tempoValue);
     try {
       // let tracks = `seed_tracks=0c6xIDDpzE81m2q797ordA`;
-      let genres = `seed_genres=country`;
+      let genres = `seed_genres=${genre}`;
       let minPopularity = `min_popularity=${popularityValue[0]}`;
       let maxPopularity = `max_popularity=${popularityValue[1]}`;
       let minEnergy = `min_energy=${energyValue[0]}`;
@@ -159,6 +160,14 @@ const CreatePlaylist = (props) => {
           max={250}
           step={10}
         />
+        <FormControl fullWidth>
+          <InputLabel id='genre-label'>Genre</InputLabel>
+          <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
+            <MenuItem value={'aountry'}>Country</MenuItem>
+            <MenuItem value={'afrobeat'}>Afrobeat</MenuItem>
+            <MenuItem value={'alternative'}>Alternative</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <button
         onClick={() => {
