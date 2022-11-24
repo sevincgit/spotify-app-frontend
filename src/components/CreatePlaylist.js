@@ -173,7 +173,8 @@ const CreatePlaylist = (props) => {
   ]);
 
   return (
-    //TODO: We need styling of the all component(responsive),  link to our last component Individual Playlist
+    //TODO:  link to our last component Individual Playlist
+    //TODO: Genre border color, slider tags bold
     <div className='d-flex justify-content-center'>
       <Box sx={{ width: 500, height: 300, display: 'flex', flexDirection: 'column' }}>
         <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
@@ -187,7 +188,7 @@ const CreatePlaylist = (props) => {
           max={1}
           step={0.1}
           valueLabelDisplay='auto'
-          sx={{ color: '#52af77' }}
+          sx={{ color: '#1ed760' }}
         />
         <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Popularity
@@ -200,7 +201,7 @@ const CreatePlaylist = (props) => {
           max={100}
           step={10}
           valueLabelDisplay='auto'
-          sx={{ color: '#52af77' }}
+          sx={{ color: '#1ed760' }}
         />
         <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Energy
@@ -213,7 +214,7 @@ const CreatePlaylist = (props) => {
           max={1}
           step={0.1}
           valueLabelDisplay='auto'
-          sx={{ color: '#52af77' }}
+          sx={{ color: '#1ed760' }}
         />
         <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Tempo
@@ -226,7 +227,7 @@ const CreatePlaylist = (props) => {
           min={50}
           max={250}
           step={10}
-          sx={{ color: '#52af77' }}
+          sx={{ color: '#1ed760' }}
         />
         <FormControl fullWidth sx={{ py: 2 }}>
           <InputLabel id='genre-label' sx={{ py: 1 }}>
