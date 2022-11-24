@@ -4,6 +4,7 @@ import CreatePlaylist from './components/CreatePlaylist';
 import { useState } from 'react';
 import Header from './components/Header';
 import MyPlaylists from './components/MyPlaylists';
+import Playlist from './components/Playlist';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ function App() {
             <Routes>
               <Route path='/' element={<CreatePlaylist token={token} spotifyUserID={spotifyUserID} />} />
               <Route path='/my-playlists' element={<MyPlaylists spotifyUserID={spotifyUserID} token={token} />} />
+              <Route path='/my-playlists/:id/:playlistName' element={<Playlist spotifyUserID={spotifyUserID} token={token} />} />
               <Route path='/about' element={<div>About Component</div>} />
               <Route path='*' element={<div>Pag not found</div>} />
             </Routes>

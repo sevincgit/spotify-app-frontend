@@ -59,7 +59,7 @@ const MyPlaylists = (props) => {
                   )}
                 </td>
                 <td>
-                  <Link to={`/my-playlists/${playlist.id}`}>{playlist.name}</Link>
+                  <Link to={`/my-playlists/${playlist.id}/${playlist.name}`}>{playlist.name}</Link>
                 </td>
                 <td>{playlist.tracks.total}</td>
               </tr>
