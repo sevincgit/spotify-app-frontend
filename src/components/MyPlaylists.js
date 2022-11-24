@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import { Link, useParams } from 'react-router-dom';
+import background from '../background.jpg';
 const headers = ['Cover', 'Name', '# Tracks'];
 
 const MyPlaylists = (props) => {
@@ -20,6 +21,7 @@ const MyPlaylists = (props) => {
         const playlistArray = playlistResponse.data.items;
         //   TODO: Find a way to retrieve all playlists by using offset parameter
         const totalNumberOfPlaylists = playlistResponse.data.total;
+        console.log('playlistResponse: ', playlistResponse);
         console.log('totalNumberOfPlaylists: ', totalNumberOfPlaylists);
         // Check if user has a playlist to avoid getPlaylist() to be called always
         if (totalNumberOfPlaylists > 0) {
@@ -50,7 +52,11 @@ const MyPlaylists = (props) => {
             return (
               <tr>
                 <td>
-                  <img src={playlist.images[0].url} style={{ width: '60px' }} alt='playlist cover' />
+                  {playlist.tracks.total === 0 ? (
+                    <p>No Image</p>
+                  ) : (
+                    <img src={playlist.images[0].url} style={{ width: '60px' }} alt='playlist cover' />
+                  )}
                 </td>
                 <td>
                   <Link to={`/my-playlists/${playlist.id}`}>{playlist.name}</Link>
