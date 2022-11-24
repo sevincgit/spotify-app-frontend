@@ -89,7 +89,8 @@ const CreatePlaylist = (props) => {
       }
     };
     listOfSongs();
-  }, [props.token, props.spotifyUserID, newPlaylistId, energyValue, danceabilityValue, genre, tempoValue, popularityValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newPlaylistId]);
 
   useEffect(() => {
     const addSongsToPlaylist = async () => {
@@ -116,7 +117,8 @@ const CreatePlaylist = (props) => {
       }
     };
     addSongsToPlaylist();
-  }, [props.token, props.spotifyUserID, newPlaylistId, recommendedSongs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recommendedSongs]);
 
   useEffect(() => {
     const sendNewPlaylistDataToBE = async () => {
@@ -159,18 +161,8 @@ const CreatePlaylist = (props) => {
       }
     };
     sendNewPlaylistDataToBE();
-  }, [
-    props.token,
-    props.spotifyUserID,
-    newPlaylistId,
-    recommendedSongs,
-    addedSongsId,
-    energyValue,
-    danceabilityValue,
-    genre,
-    tempoValue,
-    popularityValue,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addedSongsId]);
 
   return (
     //TODO:  link to our last component Individual Playlist
