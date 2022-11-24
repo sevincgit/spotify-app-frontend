@@ -174,9 +174,9 @@ const CreatePlaylist = (props) => {
 
   return (
     //TODO: We need styling of the all component(responsive),  link to our last component Individual Playlist
-    <div>
-      <Box sx={{ width: 300 }}>
-        <Typography gutterBottom style={{ textAlign: 'left' }}>
+    <div className='d-flex justify-content-center'>
+      <Box sx={{ width: 500, height: 300, display: 'flex', flexDirection: 'column' }}>
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Danceability
         </Typography>
         <Slider
@@ -187,8 +187,9 @@ const CreatePlaylist = (props) => {
           max={1}
           step={0.1}
           valueLabelDisplay='auto'
+          sx={{ color: '#52af77' }}
         />
-        <Typography gutterBottom style={{ textAlign: 'left' }}>
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Popularity
         </Typography>
         <Slider
@@ -199,8 +200,9 @@ const CreatePlaylist = (props) => {
           max={100}
           step={10}
           valueLabelDisplay='auto'
+          sx={{ color: '#52af77' }}
         />
-        <Typography gutterBottom style={{ textAlign: 'left' }}>
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Energy
         </Typography>
         <Slider
@@ -211,8 +213,9 @@ const CreatePlaylist = (props) => {
           max={1}
           step={0.1}
           valueLabelDisplay='auto'
+          sx={{ color: '#52af77' }}
         />
-        <Typography gutterBottom style={{ textAlign: 'left' }}>
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
           Tempo
         </Typography>
         <Slider
@@ -223,19 +226,22 @@ const CreatePlaylist = (props) => {
           min={50}
           max={250}
           step={10}
+          sx={{ color: '#52af77' }}
         />
-        <FormControl fullWidth>
-          <InputLabel id='genre-label'>Genre</InputLabel>
+        <FormControl fullWidth sx={{ py: 2 }}>
+          <InputLabel id='genre-label' sx={{ py: 1 }}>
+            Genre
+          </InputLabel>
           <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
             {spotifyGenres.map((genre) => {
               return <MenuItem value={genre}>{genre.charAt(0).toUpperCase() + genre.slice(1)}</MenuItem>;
             })}
           </Select>
         </FormControl>
+        <button variant={'contained'} onClick={createNewPlaylist} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
+          Create new playlist
+        </button>
       </Box>
-      <button variant={'contained'} onClick={createNewPlaylist}>
-        Create new playlist
-      </button>
     </div>
   );
 };
