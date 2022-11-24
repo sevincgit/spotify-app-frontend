@@ -119,8 +119,11 @@ const CreatePlaylist = (props) => {
   }, [props.token, props.spotifyUserID, newPlaylistId, recommendedSongs]);
 
   useEffect(() => {
-    const sendNewPlaylistDataToBE = () => {
-      let newPlaylist = {
+    const sendNewPlaylistDataToBE = async () => {
+      if (!props.token || !props.spotifyUserID || !newPlaylistId || !recommendedSongs || !addedSongsId) {
+        return;
+      }
+      let newPlaylistData = {
         id: newPlaylistId,
         mintempo: tempoValue[0],
         maxtempo: tempoValue[1],
@@ -133,12 +136,43 @@ const CreatePlaylist = (props) => {
         seed_genres: genre,
         userid: props.spotifyUserID,
       };
+      console.log('saving playlist to db');
+      let playlistsPath = `${process.env.REACT_APP_SPOTIFYAPP_API}/playlists`;
+      try {
+        let response = await fetch(playlistsPath, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify(newPlaylistData),
+        });
+        console.log('response', response);
+        let responseData = await response.json();
+        console.log('responseData', responseData);
+        if (response.status === 201) {
+          console.log('new playlist saved');
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
-  }, [props.token, props.spotifyUserID, newPlaylistId, recommendedSongs, energyValue, danceabilityValue, genre, tempoValue, popularityValue]);
+    sendNewPlaylistDataToBE();
+  }, [
+    props.token,
+    props.spotifyUserID,
+    newPlaylistId,
+    recommendedSongs,
+    addedSongsId,
+    energyValue,
+    danceabilityValue,
+    genre,
+    tempoValue,
+    popularityValue,
+  ]);
 
   return (
     //TODO: We need styling of the all component(responsive),  link to our last component Individual Playlist
-    //TODO: Backend : we need to be able to send last function data to DB => a POST request to Backend is needed
     <div>
       <Box sx={{ width: 300 }}>
         <Typography gutterBottom style={{ textAlign: 'left' }}>
