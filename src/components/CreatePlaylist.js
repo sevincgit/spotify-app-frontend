@@ -165,8 +165,11 @@ const CreatePlaylist = (props) => {
   }, [addedSongsId]);
 
   return (
-    //TODO:  link to our last component Individual Playlist
-    //TODO: Genre border color, slider tags bold
+    //TODO: required warning for genre
+    //TODO: in case of empty playlist as a response from spotify, display an error: There are no songs. Please change your settings
+    //TODO: BONUS: link to our last component Individual Playlist
+    //TODO: BONUS: Genre border color, slider tags bold
+    //TODO: BONUS: Rename the new playlist: put request to spotify
     <div className='d-flex justify-content-center'>
       <Box sx={{ width: 500, height: 300, display: 'flex', flexDirection: 'column' }}>
         <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>

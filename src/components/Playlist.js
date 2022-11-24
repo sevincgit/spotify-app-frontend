@@ -39,7 +39,6 @@ const Playlist = (props) => {
   };
   fetchPlaylist();
 
-  //   TODO: the function to get playlist data from backend.
   //TODO: send the playlist settings to createplaylist component as initial value. If not possible then display parameters as text
   return (
     <div>

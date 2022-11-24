@@ -1,4 +1,4 @@
-//TODO: Send a request to Spotify Tracks - genre endpoint to get the genres
+//TODO: BONUS: Send a request to Spotify Tracks - genre endpoint to get the genres
 export const spotifyGenres = [
   'acoustic',
   'afrobeat',

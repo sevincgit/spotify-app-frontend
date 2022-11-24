@@ -19,7 +19,7 @@ const MyPlaylists = (props) => {
           },
         });
         const playlistArray = playlistResponse.data.items;
-        //   TODO: Find a way to retrieve all playlists by using offset parameter
+        //   TODO: BONUS: Find a way to retrieve all playlists by using offset parameter
         const totalNumberOfPlaylists = playlistResponse.data.total;
         console.log('playlistResponse: ', playlistResponse);
         console.log('totalNumberOfPlaylists: ', totalNumberOfPlaylists);
