@@ -132,11 +132,11 @@ const CreatePlaylist = (props) => {
         minenergy: energyValue[0],
         maxenergy: energyValue[1],
         mindanceability: danceabilityValue[0],
-        maxdanceablity: danceabilityValue[1],
+        maxdanceability: danceabilityValue[1],
         seed_genres: genre,
         userid: props.spotifyUserID,
       };
-      console.log('saving playlist to db');
+
       let playlistsPath = `${process.env.REACT_APP_SPOTIFYAPP_API}/playlists`;
       try {
         let response = await fetch(playlistsPath, {
@@ -153,6 +153,7 @@ const CreatePlaylist = (props) => {
         if (response.status === 201) {
           console.log('new playlist saved');
         }
+        console.log('saving playlist to db');
       } catch (error) {
         console.log(error);
       }
