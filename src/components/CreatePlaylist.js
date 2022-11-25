@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, FormControl, InputLabel, MenuItem, Select, Slider, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, Slider, Typography, Button } from '@mui/material';
 import { spotifyGenres } from './SpotifyGenres';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const SPOTIFY_API = 'https://api.spotify.com';
 const RECOMMENDATIONS_ENDPOINT = `${SPOTIFY_API}/v1/recommendations`;
@@ -82,7 +83,7 @@ const CreatePlaylist = (props) => {
         console.log('token received for playlist', props.token);
         console.log('listOfSongs', data);
         const songsArray = data.tracks.map((track) => track.uri);
-        console.log(songsArray);
+        console.log('songsArray: ', songsArray);
         setRecommendedSongs(songsArray.join(','));
       } catch (error) {
         console.log(error);
@@ -225,7 +226,7 @@ const CreatePlaylist = (props) => {
           sx={{ color: '#1ed760' }}
         />
         <FormControl fullWidth sx={{ py: 2 }}>
-          <InputLabel id='genre-label' sx={{ py: 1 }}>
+          <InputLabel required id='genre-label' sx={{ py: 1 }}>
             Genre
           </InputLabel>
           <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
@@ -234,9 +235,9 @@ const CreatePlaylist = (props) => {
             })}
           </Select>
         </FormControl>
-        <button variant={'contained'} onClick={createNewPlaylist} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
+        <Button variant={'contained'} onClick={createNewPlaylist} className='my-3 px-3 border-0 fw-bold'>
           Create new playlist
-        </button>
+        </Button>
       </Box>
     </div>
   );
