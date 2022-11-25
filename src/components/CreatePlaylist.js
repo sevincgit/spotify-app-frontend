@@ -21,13 +21,17 @@ const CreatePlaylist = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const createNewPlaylist = async () => {
-    if (!props.spotifyUserID || !props.token) {
+    if (!props.spotifyUserID || !props.token)  {
       return;
     }
     setAddedSongsId('');
     setError(null);
     setErrorMessage('');
-
+    if (!genre) {
+      setError(true);
+      setErrorMessage('Please select a genre.');
+      return;
+    }
     let userId = props.spotifyUserID;
     console.log(userId);
     try {
