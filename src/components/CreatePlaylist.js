@@ -12,16 +12,19 @@ const CreatePlaylist = (props) => {
   const [newPlaylistId, setNewPlaylistId] = useState('');
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [addedSongsId, setAddedSongsId] = useState('');
-  const [energyValue, setEnergyValue] = useState([0.3, 0.5]);
-  const [tempoValue, setTempoValue] = useState([90, 120]);
-  const [popularityValue, setPopularityValue] = useState([50, 80]);
-  const [danceabilityValue, setDanceabilityValue] = useState([0.3, 0.5]);
-  const [genre, setGenre] = useState('');
+  const [energyValue, setEnergyValue] = useState(props.energyValue ? props.energyValue : [0.4, 0.8]);
+  const [tempoValue, setTempoValue] = useState(props.tempoValue ? props.tempoValue : [100, 140]);
+  const [popularityValue, setPopularityValue] = useState(props.popularityValue ? props.popularityValue : [60, 100]);
+  const [danceabilityValue, setDanceabilityValue] = useState(props.danceabilityValue ? props.danceabilityValue : [0.4, 0.8]);
+  const [genre, setGenre] = useState(props.genre ? props.genre : '');
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
+  console.log('energyValue', energyValue);
+  console.log('popularityValue', popularityValue);
+
   const createNewPlaylist = async () => {
-    if (!props.spotifyUserID || !props.token)  {
+    if (!props.spotifyUserID || !props.token) {
       return;
     }
     setAddedSongsId('');
@@ -210,7 +213,7 @@ const CreatePlaylist = (props) => {
           onChange={(e) => setDanceabilityValue(e.target.value)}
           min={0}
           max={1}
-          step={0.1}
+          step={0.2}
           valueLabelDisplay='auto'
           sx={{ color: '#1ed760' }}
         />
@@ -223,7 +226,7 @@ const CreatePlaylist = (props) => {
           onChange={(e) => setPopularityValue(e.target.value)}
           min={0}
           max={100}
-          step={10}
+          step={20}
           valueLabelDisplay='auto'
           sx={{ color: '#1ed760' }}
         />
@@ -236,7 +239,7 @@ const CreatePlaylist = (props) => {
           onChange={(e) => setEnergyValue(e.target.value)}
           min={0}
           max={1}
-          step={0.1}
+          step={0.2}
           valueLabelDisplay='auto'
           sx={{ color: '#1ed760' }}
         />
@@ -250,7 +253,7 @@ const CreatePlaylist = (props) => {
           valueLabelDisplay='auto'
           min={50}
           max={250}
-          step={10}
+          step={20}
           sx={{ color: '#1ed760' }}
         />
         <FormControl required fullWidth sx={{ py: 2 }}>
@@ -258,8 +261,12 @@ const CreatePlaylist = (props) => {
             Genre
           </InputLabel>
           <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
-            {spotifyGenres.map((genre) => {
-              return <MenuItem value={genre}>{genre.charAt(0).toUpperCase() + genre.slice(1)}</MenuItem>;
+            {spotifyGenres.map((genre, index) => {
+              return (
+                <MenuItem value={genre} key={index}>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>

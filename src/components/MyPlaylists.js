@@ -50,7 +50,7 @@ const MyPlaylists = (props) => {
         <tbody>
           {myPlaylists.map((playlist, index) => {
             return (
-              <tr>
+              <tr key={`playlist-${index}`}>
                 <td>
                   {playlist.tracks.total === 0 ? (
                     <p>No Image</p>
