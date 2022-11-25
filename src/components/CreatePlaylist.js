@@ -253,7 +253,7 @@ const CreatePlaylist = (props) => {
           step={10}
           sx={{ color: '#1ed760' }}
         />
-        <FormControl fullWidth sx={{ py: 2 }}>
+        <FormControl required fullWidth sx={{ py: 2 }}>
           <InputLabel id='genre-label' sx={{ py: 1 }}>
             Genre
           </InputLabel>
