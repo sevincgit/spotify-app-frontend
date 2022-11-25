@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, FormControl, InputLabel, MenuItem, Select, Slider, Typography } from '@mui/material';
 import { spotifyGenres } from './SpotifyGenres';
+import { Link } from 'react-router-dom';
 
 const SPOTIFY_API = 'https://api.spotify.com';
 const RECOMMENDATIONS_ENDPOINT = `${SPOTIFY_API}/v1/recommendations`;
@@ -9,17 +10,24 @@ const RECOMMENDATIONS_ENDPOINT = `${SPOTIFY_API}/v1/recommendations`;
 const CreatePlaylist = (props) => {
   const [recommendedSongs, setRecommendedSongs] = useState('');
   const [newPlaylistId, setNewPlaylistId] = useState('');
+  const [newPlaylistName, setNewPlaylistName] = useState('');
   const [addedSongsId, setAddedSongsId] = useState('');
   const [energyValue, setEnergyValue] = useState([0.3, 0.5]);
   const [tempoValue, setTempoValue] = useState([90, 120]);
   const [popularityValue, setPopularityValue] = useState([50, 80]);
   const [danceabilityValue, setDanceabilityValue] = useState([0.3, 0.5]);
   const [genre, setGenre] = useState('');
+  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const createNewPlaylist = async () => {
     if (!props.spotifyUserID || !props.token) {
       return;
     }
+    setAddedSongsId('');
+    setError(null);
+    setErrorMessage('');
+
     let userId = props.spotifyUserID;
     console.log(userId);
     try {
@@ -28,8 +36,8 @@ const CreatePlaylist = (props) => {
       const { data } = await axios.post(
         NEWPLAYLIST_ENDPOINT,
         {
-          name: 'New Playlist',
-          description: 'New playlist description',
+          name: 'Your discovery playlist',
+          description: 'Playlist description',
           public: false,
         },
         {
@@ -44,7 +52,9 @@ const CreatePlaylist = (props) => {
       console.log('token received', props.token);
       console.log('playlist data', data);
       setNewPlaylistId(data.id);
-      console.log(data.id);
+      setNewPlaylistName(data.name);
+      console.log('NewPlaylistId: ', newPlaylistId);
+      console.log('NewPlaylistName: ', newPlaylistName);
     } catch (error) {
       console.log(error);
     }
@@ -69,21 +79,36 @@ const CreatePlaylist = (props) => {
         let maxDanceability = `max_danceability=${danceabilityValue[1]}`;
 
         let recommendationPath = `${RECOMMENDATIONS_ENDPOINT}?${genres}&${minDanceability}&${maxDanceability}&${minPopularity}&${maxPopularity}&${minEnergy}&${maxEnergy}&${minTempoValue}&${maxTempoValue}`;
+        console.log(RECOMMENDATIONS_ENDPOINT);
         console.log(recommendationPath);
+        console.log('token received for playlist', props.token);
 
-        const { data } = await axios.get(recommendationPath, {
+        const recommendationResponse = await axios.get(recommendationPath, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + props.token,
           },
         });
-        console.log(RECOMMENDATIONS_ENDPOINT);
-        console.log('token received for playlist', props.token);
-        console.log('listOfSongs', data);
-        const songsArray = data.tracks.map((track) => track.uri);
-        console.log(songsArray);
-        setRecommendedSongs(songsArray.join(','));
+        if (recommendationResponse.status === 200) {
+          const recommendationData = recommendationResponse.data;
+          if (recommendationData.tracks.length === 0) {
+            setError(true);
+            setErrorMessage('Spotify could not find any song with these audio features. Please try again.');
+            return;
+          }
+          console.log('recommendationResponse', recommendationResponse);
+          console.log('recommendedData', recommendationData);
+          console.log('recommendedTracks', recommendationData.tracks);
+
+          const songsArray = recommendationData.tracks.map((track) => track.uri);
+          console.log(songsArray);
+          setRecommendedSongs(songsArray.join(','));
+        } else {
+          setError(true);
+          setErrorMessage('Sorry, the songs could not be fetched');
+          return;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -238,6 +263,8 @@ const CreatePlaylist = (props) => {
           Create new playlist
         </button>
       </Box>
+      {error ? <p>{errorMessage}</p> : null}
+      {addedSongsId ? <Link to={`/my-playlists/${newPlaylistId}/${newPlaylistName}`}>Go to your playlist!</Link> : null}
     </div>
   );
 };
