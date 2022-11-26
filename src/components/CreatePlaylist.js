@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, FormControl, InputLabel, MenuItem, Select, Slider, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+  Typography,
+} from '@mui/material';
+import { borders } from '@mui/system';
 import { spotifyGenres } from './SpotifyGenres';
 import { Link } from 'react-router-dom';
 
@@ -12,10 +21,18 @@ const CreatePlaylist = (props) => {
   const [newPlaylistId, setNewPlaylistId] = useState('');
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [addedSongsId, setAddedSongsId] = useState('');
-  const [energyValue, setEnergyValue] = useState(props.energyValue ? props.energyValue : [0.4, 0.8]);
-  const [tempoValue, setTempoValue] = useState(props.tempoValue ? props.tempoValue : [100, 140]);
-  const [popularityValue, setPopularityValue] = useState(props.popularityValue ? props.popularityValue : [60, 100]);
-  const [danceabilityValue, setDanceabilityValue] = useState(props.danceabilityValue ? props.danceabilityValue : [0.4, 0.8]);
+  const [energyValue, setEnergyValue] = useState(
+    props.energyValue ? props.energyValue : [0.4, 0.8]
+  );
+  const [tempoValue, setTempoValue] = useState(
+    props.tempoValue ? props.tempoValue : [100, 140]
+  );
+  const [popularityValue, setPopularityValue] = useState(
+    props.popularityValue ? props.popularityValue : [60, 100]
+  );
+  const [danceabilityValue, setDanceabilityValue] = useState(
+    props.danceabilityValue ? props.danceabilityValue : [0.4, 0.8]
+  );
   const [genre, setGenre] = useState(props.genre ? props.genre : '');
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -43,7 +60,7 @@ const CreatePlaylist = (props) => {
       const { data } = await axios.post(
         NEWPLAYLIST_ENDPOINT,
         {
-          name: 'Your discovery playlist',
+          name: 'Your Tune salad playlist',
           description: 'Playlist description',
           public: false,
         },
@@ -101,14 +118,18 @@ const CreatePlaylist = (props) => {
           const recommendationData = recommendationResponse.data;
           if (recommendationData.tracks.length === 0) {
             setError(true);
-            setErrorMessage('Spotify could not find any song with these audio features. Please try again.');
+            setErrorMessage(
+              'Spotify could not find any song with these audio features. Please try again.'
+            );
             return;
           }
           console.log('recommendationResponse', recommendationResponse);
           console.log('recommendedData', recommendationData);
           console.log('recommendedTracks', recommendationData.tracks);
 
-          const songsArray = recommendationData.tracks.map((track) => track.uri);
+          const songsArray = recommendationData.tracks.map(
+            (track) => track.uri
+          );
           console.log(songsArray);
           setRecommendedSongs(songsArray.join(','));
         } else {
@@ -131,16 +152,20 @@ const CreatePlaylist = (props) => {
       }
       try {
         console.log(recommendedSongs);
-        const { data } = await axios.post(`https://api.spotify.com/v1/playlists/${newPlaylistId}/tracks`, '', {
-          params: {
-            uris: recommendedSongs,
-          },
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + props.token,
-          },
-        });
+        const { data } = await axios.post(
+          `https://api.spotify.com/v1/playlists/${newPlaylistId}/tracks`,
+          '',
+          {
+            params: {
+              uris: recommendedSongs,
+            },
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + props.token,
+            },
+          }
+        );
         console.log('Songs added to new playlist', data);
         console.log('New playlist id', newPlaylistId);
         setAddedSongsId(data.snapshot_id);
@@ -154,7 +179,13 @@ const CreatePlaylist = (props) => {
 
   useEffect(() => {
     const sendNewPlaylistDataToBE = async () => {
-      if (!props.token || !props.spotifyUserID || !newPlaylistId || !recommendedSongs || !addedSongsId) {
+      if (
+        !props.token ||
+        !props.spotifyUserID ||
+        !newPlaylistId ||
+        !recommendedSongs ||
+        !addedSongsId
+      ) {
         return;
       }
       let newPlaylistData = {
@@ -197,85 +228,119 @@ const CreatePlaylist = (props) => {
   }, [addedSongsId]);
 
   return (
-    //TODO: required warning for genre
-    //TODO: in case of empty playlist as a response from spotify, display an error: There are no songs. Please change your settings
-    //TODO: BONUS: link to our last component Individual Playlist
-    //TODO: BONUS: Genre border color, slider tags bold
-    //TODO: BONUS: Rename the new playlist: put request to spotify
-    <div className='d-flex justify-content-center'>
-      <Box sx={{ width: 500, height: 300, display: 'flex', flexDirection: 'column' }}>
-        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
-          Danceability
-        </Typography>
-        <Slider
-          getAriaLabel={() => 'Danceability range'}
-          value={danceabilityValue}
-          onChange={(e) => setDanceabilityValue(e.target.value)}
-          min={0}
-          max={1}
-          step={0.2}
-          valueLabelDisplay='auto'
-          sx={{ color: '#1ed760' }}
-        />
-        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
-          Popularity
-        </Typography>
-        <Slider
-          getAriaLabel={() => 'Popularity range'}
-          value={popularityValue}
-          onChange={(e) => setPopularityValue(e.target.value)}
-          min={0}
-          max={100}
-          step={20}
-          valueLabelDisplay='auto'
-          sx={{ color: '#1ed760' }}
-        />
-        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
-          Energy
-        </Typography>
-        <Slider
-          getAriaLabel={() => 'Energy range'}
-          value={energyValue}
-          onChange={(e) => setEnergyValue(e.target.value)}
-          min={0}
-          max={1}
-          step={0.2}
-          valueLabelDisplay='auto'
-          sx={{ color: '#1ed760' }}
-        />
-        <Typography gutterBottom sx={{ textAlign: 'left', py: 2 }}>
-          Tempo
-        </Typography>
-        <Slider
-          getAriaLabel={() => 'Tempo range'}
-          value={tempoValue}
-          onChange={(e) => setTempoValue(e.target.value)}
-          valueLabelDisplay='auto'
-          min={50}
-          max={250}
-          step={20}
-          sx={{ color: '#1ed760' }}
-        />
-        <FormControl required fullWidth sx={{ py: 2 }}>
-          <InputLabel id='genre-label' sx={{ py: 1 }}>
-            Genre
-          </InputLabel>
-          <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
-            {spotifyGenres.map((genre, index) => {
-              return (
-                <MenuItem value={genre} key={index}>
-                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-        <button variant={'contained'} onClick={createNewPlaylist} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
-          Create new playlist
-        </button>
+    <div container className="d-flex justify-content-center">
+      <Box
+        sx={{ width: 600, height: 600, border: 3, padding: 5, margin: 2, borderRadius:'12px'}}
+      >
+        <Box
+          sx={{
+            width: 500,
+            height: 300,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          className="p-6"
+        >
+          <Typography
+            gutterBottom
+            sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}
+          >
+            Danceability
+          </Typography>
+          <Slider
+            getAriaLabel={() => 'Danceability range'}
+            value={danceabilityValue}
+            onChange={(e) => setDanceabilityValue(e.target.value)}
+            min={0}
+            max={1}
+            step={0.2}
+            valueLabelDisplay="auto"
+            sx={{ color: '#1ed760' }}
+          />
+          <Typography
+            gutterBottom
+            sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}
+          >
+            Popularity
+          </Typography>
+          <Slider
+            getAriaLabel={() => 'Popularity range'}
+            value={popularityValue}
+            onChange={(e) => setPopularityValue(e.target.value)}
+            min={0}
+            max={100}
+            step={20}
+            valueLabelDisplay="auto"
+            sx={{ color: '#1ed760' }}
+          />
+          <Typography
+            gutterBottom
+            sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}
+          >
+            Energy
+          </Typography>
+          <Slider
+            getAriaLabel={() => 'Energy range'}
+            value={energyValue}
+            onChange={(e) => setEnergyValue(e.target.value)}
+            min={0}
+            max={1}
+            step={0.2}
+            valueLabelDisplay="auto"
+            sx={{ color: '#1ed760' }}
+          />
+          <Typography
+            gutterBottom
+            sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}
+          >
+            Tempo
+          </Typography>
+          <Slider
+            getAriaLabel={() => 'Tempo range'}
+            value={tempoValue}
+            onChange={(e) => setTempoValue(e.target.value)}
+            valueLabelDisplay="auto"
+            min={50}
+            max={250}
+            step={20}
+            sx={{ color: '#1ed760' }}
+          />
+          <FormControl required fullWidth sx={{ py: 2 }}>
+            <InputLabel id="genre-label" sx={{ py: 1, fontWeight: 'bold' }}>
+              Genre
+            </InputLabel>
+            <Select
+              labelId="genre-label"
+              id="genre-select"
+              value={genre}
+              label="Age"
+              onChange={(e) => setGenre(e.target.value)}
+            >
+              {spotifyGenres.map((genre, index) => {
+                return (
+                  <MenuItem value={genre} key={index}>
+                    {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <button
+            variant={'contained'}
+            onClick={createNewPlaylist}
+            className="btn my-3 px-3 border-0 fw-bold"
+            style={{ backgroundColor: '#1ed760' }}
+          >
+            Create new playlist
+          </button>
+          {error ? <p>{errorMessage}</p> : null}
+          {addedSongsId ? (
+            <Link to={`/my-playlists/${newPlaylistId}/${newPlaylistName}`}>
+              Go to your playlist!
+            </Link>
+          ) : null}
+        </Box>
       </Box>
-      {error ? <p>{errorMessage}</p> : null}
-      {addedSongsId ? <Link to={`/my-playlists/${newPlaylistId}/${newPlaylistName}`}>Go to your playlist!</Link> : null}
     </div>
   );
 };

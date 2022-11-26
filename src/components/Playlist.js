@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CreatePlaylist from './CreatePlaylist';
+import Grid from '@mui/material/Grid'
 
 const Playlist = (props) => {
   const [isPlaylistInDB, setIsPlaylistInDB] = useState(null);
@@ -46,28 +47,26 @@ const Playlist = (props) => {
     fetchPlaylist();
   }, [props.token, playlistId]);
 
-  //TODO: send the playlist settings to createplaylist component as initial value. If not possible then display parameters as text
   return (
-    <div>
-      <div className='embedded-playlist'>
-        <p>{playlistName}</p>
+    <Grid container>
+      <Grid className='embedded-playlist' item xs={4} sm={4} md={5} lg={6}>
+        <h3 className='m-4' >{playlistName}</h3>
         <iframe
           title={playlistName}
           style={{ borderRadius: '12px' }}
           src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`}
-          width='40%'
+          width='60%'
           height='380'
           frameBorder='0'
           allowfullscreen=''
           allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
           loading='lazy'
         ></iframe>
-      </div>
-      <div>
+      </Grid>
+      <Grid item xs={4} sm={4} md={5} lg={6}>
         {isPlaylistInDB && playlistData.data ? (
           <>
-            <h3>Your playlist settings</h3>
-            <p>Danceability: 0.3-0.5</p>
+            <h3 className='mt-4'>Your playlist settings</h3>
             <CreatePlaylist
               token={props.token}
               spotifyUserID={props.spotifyUserID}
@@ -81,8 +80,8 @@ const Playlist = (props) => {
         ) : (
           <p>Playlist not created by our app</p>
         )}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 
