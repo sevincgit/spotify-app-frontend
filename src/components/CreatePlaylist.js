@@ -44,7 +44,7 @@ const CreatePlaylist = (props) => {
       const { data } = await axios.post(
         NEWPLAYLIST_ENDPOINT,
         {
-          name: 'Your Tune salad playlist',
+          name: 'Your Tune Salad playlist',
           description: 'Playlist description',
           public: false,
         },
@@ -199,88 +199,89 @@ const CreatePlaylist = (props) => {
 
   return (
     <div className='d-flex justify-content-center'>
-      <Box sx={{ width: 600, height: 600, border: 3, padding: 5, margin: 2, borderRadius: '12px' }}>
-        <Box
-          sx={{
-            width: 500,
-            height: 300,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-          className='p-6'
-        >
-          <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
-            Danceability
-          </Typography>
-          <Slider
-            getAriaLabel={() => 'Danceability range'}
-            value={danceabilityValue}
-            onChange={(e) => setDanceabilityValue(e.target.value)}
-            min={0}
-            max={1}
-            step={0.2}
-            valueLabelDisplay='auto'
-            sx={{ color: '#1ed760' }}
-          />
-          <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
-            Popularity
-          </Typography>
-          <Slider
-            getAriaLabel={() => 'Popularity range'}
-            value={popularityValue}
-            onChange={(e) => setPopularityValue(e.target.value)}
-            min={0}
-            max={100}
-            step={20}
-            valueLabelDisplay='auto'
-            sx={{ color: '#1ed760' }}
-          />
-          <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
-            Energy
-          </Typography>
-          <Slider
-            getAriaLabel={() => 'Energy range'}
-            value={energyValue}
-            onChange={(e) => setEnergyValue(e.target.value)}
-            min={0}
-            max={1}
-            step={0.2}
-            valueLabelDisplay='auto'
-            sx={{ color: '#1ed760' }}
-          />
-          <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
-            Tempo
-          </Typography>
-          <Slider
-            getAriaLabel={() => 'Tempo range'}
-            value={tempoValue}
-            onChange={(e) => setTempoValue(e.target.value)}
-            valueLabelDisplay='auto'
-            min={50}
-            max={250}
-            step={20}
-            sx={{ color: '#1ed760' }}
-          />
-          <FormControl required fullWidth sx={{ py: 2 }}>
-            <InputLabel id='genre-label' sx={{ py: 1, fontWeight: 'bold' }}>
-              Genre
-            </InputLabel>
-            <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
-              {spotifyGenres.map((genre, index) => {
-                return (
-                  <MenuItem value={genre} key={index}>
-                    {genre.charAt(0).toUpperCase() + genre.slice(1)}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <button variant={'contained'} onClick={createNewPlaylist} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
-            Create new playlist
-          </button>
-          {error ? <p>{errorMessage}</p> : null}
-          {addedSongsId ? <Link to={`/my-playlists/${newPlaylistId}/${newPlaylistName}`}>Go to your playlist!</Link> : null}
-        </Box>
+      <Box
+        sx={{
+          width: '40vw',
+          height: '80vh',
+          display: 'flex',
+          flexDirection: 'column',
+          border: 3,
+          padding: 3,
+          margin: 2,
+          borderRadius: '12px',
+        }}
+      >
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
+          Danceability
+        </Typography>
+        <Slider
+          getAriaLabel={() => 'Danceability range'}
+          value={danceabilityValue}
+          onChange={(e) => setDanceabilityValue(e.target.value)}
+          min={0}
+          max={1}
+          step={0.2}
+          valueLabelDisplay='auto'
+          sx={{ color: '#1ed760' }}
+        />
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
+          Popularity
+        </Typography>
+        <Slider
+          getAriaLabel={() => 'Popularity range'}
+          value={popularityValue}
+          onChange={(e) => setPopularityValue(e.target.value)}
+          min={0}
+          max={100}
+          step={20}
+          valueLabelDisplay='auto'
+          sx={{ color: '#1ed760' }}
+        />
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
+          Energy
+        </Typography>
+        <Slider
+          getAriaLabel={() => 'Energy range'}
+          value={energyValue}
+          onChange={(e) => setEnergyValue(e.target.value)}
+          min={0}
+          max={1}
+          step={0.2}
+          valueLabelDisplay='auto'
+          sx={{ color: '#1ed760' }}
+        />
+        <Typography gutterBottom sx={{ textAlign: 'left', py: 2, fontWeight: 'bold' }}>
+          Tempo
+        </Typography>
+        <Slider
+          getAriaLabel={() => 'Tempo range'}
+          value={tempoValue}
+          onChange={(e) => setTempoValue(e.target.value)}
+          valueLabelDisplay='auto'
+          min={50}
+          max={250}
+          step={20}
+          sx={{ color: '#1ed760' }}
+        />
+        <FormControl required fullWidth sx={{ py: 2 }}>
+          <InputLabel id='genre-label' sx={{ py: 1, fontWeight: 'bold' }}>
+            Genre
+          </InputLabel>
+          <Select labelId='genre-label' id='genre-select' value={genre} label='Age' onChange={(e) => setGenre(e.target.value)}>
+            {spotifyGenres.map((genre, index) => {
+              return (
+                <MenuItem value={genre} key={index}>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        <button variant={'contained'} onClick={createNewPlaylist} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
+          Create new playlist
+        </button>
+        {error ? <p>{errorMessage}</p> : null}
+        {addedSongsId ? <Link to={`/my-playlists/${newPlaylistId}/${newPlaylistName}`}>Go to your playlist!</Link> : null}
       </Box>
     </div>
   );

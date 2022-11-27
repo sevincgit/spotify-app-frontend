@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CreatePlaylist from './CreatePlaylist';
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid';
+import { Box } from '@mui/system';
 
 const Playlist = (props) => {
   const [isPlaylistInDB, setIsPlaylistInDB] = useState(null);
@@ -50,23 +51,24 @@ const Playlist = (props) => {
   return (
     <Grid container>
       <Grid className='embedded-playlist' item xs={4} sm={4} md={5} lg={6}>
-        <h3 className='m-4' >{playlistName}</h3>
+        <h3 className='m-4'>{playlistName}</h3>
         <iframe
           title={playlistName}
           style={{ borderRadius: '12px' }}
           src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`}
-          width='60%'
-          height='380'
+          width='80%'
+          height='80%'
           frameBorder='0'
           allowfullscreen=''
           allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
           loading='lazy'
         ></iframe>
       </Grid>
-      <Grid item xs={4} sm={4} md={5} lg={6}>
+      <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
+      <Grid item xs={4} sm={4} md={5} lg={4}>
         {isPlaylistInDB && playlistData.data ? (
           <>
-            <h3 className='mt-4'>Your playlist settings</h3>
+            <h3 className='mt-4'>Your Playlist Settings</h3>
             <CreatePlaylist
               token={props.token}
               spotifyUserID={props.spotifyUserID}
@@ -78,7 +80,16 @@ const Playlist = (props) => {
             />
           </>
         ) : (
-          <p>Playlist not created by our app</p>
+          <>
+            <Box
+              sx={{
+                width: '40vw',
+                height: '80vh',
+              }}
+            >
+              <h3 className='mt-4'>Playlist was not created by Tune Salad</h3>
+            </Box>
+          </>
         )}
       </Grid>
     </Grid>
