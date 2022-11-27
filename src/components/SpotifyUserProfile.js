@@ -71,9 +71,11 @@ const SpotifyUserProfile = (props) => {
 
   return (
     <div>
-      <img src={spotifyUserImageUrl} className='rounded-circle' style={{ height: '40px', width: '50px' }} alt='Avatar' />
+      <img src={spotifyUserImageUrl} className='rounded-circle' style={{ height: '40px', width: '45px' }} alt='Avatar' />
       {/* <Avatar alt='User image' src={spotifyUserImageUrl} sx={{ width: 24, height: 24 }} /> */}
-      <p>{spotifyProfileName}</p>
+      <p className='m-0' style={{ color: 'white', fontSize: '0.8rem' }}>
+        {spotifyProfileName}
+      </p>
     </div>
   );
 };
