@@ -202,11 +202,12 @@ const CreatePlaylist = (props) => {
       <Box
         sx={{
           width: '40vw',
-          height: '80vh',
+          height: '85vh',
           display: 'flex',
           flexDirection: 'column',
           border: 3,
-          padding: 3,
+          py: 1,
+          px: 3,
           margin: 2,
           borderRadius: '12px',
         }}
