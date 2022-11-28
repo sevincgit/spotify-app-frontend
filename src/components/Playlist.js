@@ -57,7 +57,7 @@ const Playlist = (props) => {
           style={{ borderRadius: '12px' }}
           src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`}
           width='80%'
-          height='80%'
+          height='85%'
           frameBorder='0'
           allowfullscreen=''
           allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
