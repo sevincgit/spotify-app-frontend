@@ -24,7 +24,7 @@ const CreatePlaylist = (props) => {
   console.log('energyValue', energyValue);
   console.log('popularityValue', popularityValue);
 
-  const createNewPlaylist = async () => {
+  const listOfSongs = async () => {
     if (!props.spotifyUserID || !props.token) {
       return;
     }
@@ -34,96 +34,108 @@ const CreatePlaylist = (props) => {
     if (!genre) {
       setError(true);
       setErrorMessage('Please select a genre.');
+      setAddedSongsId('');
       return;
     }
-    let userId = props.spotifyUserID;
-    console.log(userId);
+    console.log(energyValue);
+    console.log(tempoValue);
     try {
-      console.log('create new playlist', props.token);
-      const NEWPLAYLIST_ENDPOINT = `${SPOTIFY_API}/v1/users/${userId}/playlists`;
-      const { data } = await axios.post(
-        NEWPLAYLIST_ENDPOINT,
-        {
-          name: 'Your Tune Salad playlist',
-          description: 'Playlist description',
-          public: false,
+      let genres = `seed_genres=${genre}`;
+      let minPopularity = `min_popularity=${popularityValue[0]}`;
+      let maxPopularity = `max_popularity=${popularityValue[1]}`;
+      let minEnergy = `min_energy=${energyValue[0]}`;
+      let maxEnergy = `max_energy=${energyValue[1]}`;
+      let minTempoValue = `min_tempo=${tempoValue[0]}`;
+      let maxTempoValue = `max_tempo=${tempoValue[1]}`;
+      let minDanceability = `min_danceability=${danceabilityValue[0]}`;
+      let maxDanceability = `max_danceability=${danceabilityValue[1]}`;
+
+      let recommendationPath = `${RECOMMENDATIONS_ENDPOINT}?${genres}&${minDanceability}&${maxDanceability}&${minPopularity}&${maxPopularity}&${minEnergy}&${maxEnergy}&${minTempoValue}&${maxTempoValue}`;
+      console.log(RECOMMENDATIONS_ENDPOINT);
+      console.log(recommendationPath);
+      console.log('token received for playlist', props.token);
+
+      const recommendationResponse = await axios.get(recommendationPath, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + props.token,
         },
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + props.token,
-          },
+      });
+      if (recommendationResponse.status === 200) {
+        const recommendationData = recommendationResponse.data;
+        if (recommendationData.tracks.length === 0) {
+          setError(true);
+          setErrorMessage('Spotify could not find any song with these audio features. Please try again.');
+          setAddedSongsId('');
+          return;
         }
-      );
-      console.log(NEWPLAYLIST_ENDPOINT);
-      console.log('token received', props.token);
-      console.log('playlist data', data);
-      setNewPlaylistId(data.id);
-      setNewPlaylistName(data.name);
-      console.log('NewPlaylistId: ', newPlaylistId);
-      console.log('NewPlaylistName: ', newPlaylistName);
+        console.log('recommendationResponse', recommendationResponse);
+        console.log('recommendedData', recommendationData);
+        console.log('recommendedTracks', recommendationData.tracks);
+
+        const songsArray = recommendationData.tracks.map((track) => track.uri);
+        console.log(songsArray);
+        setRecommendedSongs(songsArray.join(','));
+      } else {
+        setError(true);
+        setErrorMessage('Sorry, the songs could not be fetched');
+        setAddedSongsId('');
+        return;
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    const listOfSongs = async () => {
-      if (!props.spotifyUserID || !newPlaylistId) {
+    const createNewPlaylist = async () => {
+      if (!props.spotifyUserID || !recommendedSongs) {
         return;
       }
-      console.log(energyValue);
-      console.log(tempoValue);
+      // setAddedSongsId('');
+      // setError(null);
+      // setErrorMessage('');
+      // if (!genre) {
+      //   setError(true);
+      //   setErrorMessage('Please select a genre.');
+      //   setAddedSongsId('');
+      //   return;
+      // }
+      let userId = props.spotifyUserID;
+      console.log(userId);
       try {
-        let genres = `seed_genres=${genre}`;
-        let minPopularity = `min_popularity=${popularityValue[0]}`;
-        let maxPopularity = `max_popularity=${popularityValue[1]}`;
-        let minEnergy = `min_energy=${energyValue[0]}`;
-        let maxEnergy = `max_energy=${energyValue[1]}`;
-        let minTempoValue = `min_tempo=${tempoValue[0]}`;
-        let maxTempoValue = `max_tempo=${tempoValue[1]}`;
-        let minDanceability = `min_danceability=${danceabilityValue[0]}`;
-        let maxDanceability = `max_danceability=${danceabilityValue[1]}`;
-
-        let recommendationPath = `${RECOMMENDATIONS_ENDPOINT}?${genres}&${minDanceability}&${maxDanceability}&${minPopularity}&${maxPopularity}&${minEnergy}&${maxEnergy}&${minTempoValue}&${maxTempoValue}`;
-        console.log(RECOMMENDATIONS_ENDPOINT);
-        console.log(recommendationPath);
-        console.log('token received for playlist', props.token);
-
-        const recommendationResponse = await axios.get(recommendationPath, {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + props.token,
+        console.log('create new playlist', props.token);
+        const NEWPLAYLIST_ENDPOINT = `${SPOTIFY_API}/v1/users/${userId}/playlists`;
+        const { data } = await axios.post(
+          NEWPLAYLIST_ENDPOINT,
+          {
+            name: 'Your Tune Salad playlist',
+            description: 'Playlist description',
+            public: false,
           },
-        });
-        if (recommendationResponse.status === 200) {
-          const recommendationData = recommendationResponse.data;
-          if (recommendationData.tracks.length === 0) {
-            setError(true);
-            setErrorMessage('Spotify could not find any song with these audio features. Please try again.');
-            return;
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + props.token,
+            },
           }
-          console.log('recommendationResponse', recommendationResponse);
-          console.log('recommendedData', recommendationData);
-          console.log('recommendedTracks', recommendationData.tracks);
-
-          const songsArray = recommendationData.tracks.map((track) => track.uri);
-          console.log(songsArray);
-          setRecommendedSongs(songsArray.join(','));
-        } else {
-          setError(true);
-          setErrorMessage('Sorry, the songs could not be fetched');
-          return;
-        }
+        );
+        console.log(NEWPLAYLIST_ENDPOINT);
+        console.log('token received', props.token);
+        console.log('playlist data', data);
+        setNewPlaylistId(data.id);
+        setNewPlaylistName(data.name);
+        console.log('NewPlaylistId: ', newPlaylistId);
+        console.log('NewPlaylistName: ', newPlaylistName);
       } catch (error) {
         console.log(error);
       }
     };
-    listOfSongs();
+    createNewPlaylist();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newPlaylistId]);
+  }, [recommendedSongs]);
 
   useEffect(() => {
     const addSongsToPlaylist = async () => {
@@ -151,7 +163,7 @@ const CreatePlaylist = (props) => {
     };
     addSongsToPlaylist();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recommendedSongs]);
+  }, [newPlaylistId]);
 
   useEffect(() => {
     const sendNewPlaylistDataToBE = async () => {
@@ -277,7 +289,7 @@ const CreatePlaylist = (props) => {
             })}
           </Select>
         </FormControl>
-        <button variant={'contained'} onClick={createNewPlaylist} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
+        <button variant={'contained'} onClick={listOfSongs} className='btn my-3 px-3 border-0 fw-bold' style={{ backgroundColor: '#1ed760' }}>
           Create new playlist
         </button>
         {error ? <p>{errorMessage}</p> : null}
