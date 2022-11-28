@@ -21,9 +21,6 @@ const CreatePlaylist = (props) => {
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  console.log('energyValue', energyValue);
-  console.log('popularityValue', popularityValue);
-
   const listOfSongs = async () => {
     if (!props.spotifyUserID || !props.token) {
       return;
